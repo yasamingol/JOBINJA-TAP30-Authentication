@@ -1,39 +1,31 @@
 from flask import Flask, request
-from datetime import datetime
+from datetime import date, datetime
 import jwt
+import json
 
+# server requests
 app = Flask(__name__)
 
-accountUserName = None
-accountPassWord = None
-loginToken = None
 
-
-@app.route('/login',methods=['POST'])
+@app.route('/login', methods=['POST'])
 def login():
     if request.method == 'POST':
         accountUserName = request.json.get('username')
         accountPassWord = request.json.get('password')
-        return accountPassWord+accountUserName
+        # return createToken(accountUserName, accountPassWord)
 
 
-def createToken(username, password):
-    try:
-        user = {
-            'username': username,
-            'password': password,
-            'time': datetime.now()
-        }
-        return jwt.encode(
-            user,
-            app.config.get('SECRET_KEY'),
-            algorithm='HS256'
-        )
-    except Exception as e:
-        return e
-
-
+# token
+def createToken():
+    user = {
+        "username": "jafar",
+        "password": "1234"
+    }
+    payload = {"some": "payload", "aud": user}
+    encoded = jwt.encode(payload, "secret")
+    return encoded
 
 
 if __name__ == '__main__':
-    app.run(host="127.0.0.1", port="5000")
+    # app.run(host="127.0.0.1", port="5000")
+    print(createToken())
