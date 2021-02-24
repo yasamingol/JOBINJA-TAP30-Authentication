@@ -5,13 +5,18 @@ c = sqlite3.connect('loginDB.db')
 db = c.cursor()
 
 
-async def createConfirmationsTable():
-     db.execute('CREATE TABLE Logins (id, userId, loginToken, loginTime)')
-     print("Confirmation DB created successfully")
+async def createLoginTable():
+     db.execute('''CREATE TABLE if not exists Logins
+           (id INT PRIMARY KEY  NOT NULL,
+           userId          TEXT             NOT NULL,
+           loginToken      TEXT             NOT NULL,
+           loginTime       TEXT             NOT NULL);''')
+     print("Logins DB created successfully")
 
 
 async def saveLogin(userId, loginToken, loginTime):
-    db.execute('INSERT INTO Logins VALUES (?,?,?,?)', ("0", userId, loginToken, loginTime))
+    id = await getNumberOfRowsOfLoginsTable()
+    db.execute('INSERT INTO Logins VALUES (?,?,?,?)', (id, userId, loginToken, loginTime))
     print("login saved to DB successfully")
     c.commit()
 
@@ -26,17 +31,13 @@ async def getLoginsFullDBTable():
 
 
 async def getLoginIdUsingToken(token):
-    loginId = db.execute('SELECT id FROM Logins WHERE loginToken = ?', (token,))
-    if loginId != None:
-        return loginId.id
-
-    else:
-        return None
+    loginId = db.execute('SELECT id FROM Logins WHERE loginToken = ?', (token,)).fetchone()
+    return loginId;
 
 
 async def getAccountIdUsingToken(token):
     accountId = db.execute('SELECT userId FROM Logins WHERE loginToken = ? ', (token,))
-    return accountId.userId
+    return accountId
 
 
 async def getLastLoginTokenId(accountId):
@@ -45,6 +46,6 @@ async def getLastLoginTokenId(accountId):
 
 
 if __name__ == '__main__':
-    # asyncio.run(createConfirmationsTable())
+    asyncio.run(createLoginTable())
     asyncio.run(saveLogin("0", "1234", "111"))
     print(asyncio.run(getLoginsFullDBTable()))
