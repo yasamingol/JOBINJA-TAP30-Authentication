@@ -1,5 +1,4 @@
 import sqlite3
-import asyncio
 
 c = sqlite3.connect('loginDB.db')
 db = c.cursor()
@@ -43,10 +42,3 @@ async def getAccountIdUsingToken(token):
 async def getLastLoginTokenId(accountId):
     tokenId = db.execute('SELECT id FROM Logins WHERE userId = ? ORDER BY loginTime DESC ', (accountId,)).fetchone()[0]
     return tokenId
-
-
-if __name__ == '__main__':
-    # asyncio.run(createLoginTable())
-    # asyncio.run(saveLogin("0", "1234", "111"))
-    asyncio.run(saveLogin("0", "123876786", "178711"))
-    print(asyncio.run(getLastLoginTokenId("0")))
