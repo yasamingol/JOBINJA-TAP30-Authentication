@@ -22,7 +22,7 @@ async def saveLogin(userId, loginToken, loginTime):
 
 
 async def getNumberOfRowsOfLoginsTable():
-    rowCounter = 0
+    rowCounter = 1
     return rowCounter
 
 
@@ -31,21 +31,22 @@ async def getLoginsFullDBTable():
 
 
 async def getLoginIdUsingToken(token):
-    loginId = db.execute('SELECT id FROM Logins WHERE loginToken = ?', (token,)).fetchone()
-    return loginId;
+    loginId = db.execute('SELECT id FROM Logins WHERE loginToken = ?', (token,)).fetchone()[0]
+    return loginId
 
 
 async def getAccountIdUsingToken(token):
-    accountId = db.execute('SELECT userId FROM Logins WHERE loginToken = ? ', (token,))
+    accountId = db.execute('SELECT userId FROM Logins WHERE loginToken = ? ', (token,)).fetchone()[0]
     return accountId
 
 
 async def getLastLoginTokenId(accountId):
-    tokenId = db.execute('SELECT id FROM Logins WHERE userId = ? ORDER BY loginTime DESC ', (accountId,))
-    return tokenId.id
+    tokenId = db.execute('SELECT id FROM Logins WHERE userId = ? ORDER BY loginTime DESC ', (accountId,)).fetchone()[0]
+    return tokenId
 
 
 if __name__ == '__main__':
-    asyncio.run(createLoginTable())
-    asyncio.run(saveLogin("0", "1234", "111"))
-    print(asyncio.run(getLoginsFullDBTable()))
+    # asyncio.run(createLoginTable())
+    # asyncio.run(saveLogin("0", "1234", "111"))
+    asyncio.run(saveLogin("0", "123876786", "178711"))
+    print(asyncio.run(getLastLoginTokenId("0")))
