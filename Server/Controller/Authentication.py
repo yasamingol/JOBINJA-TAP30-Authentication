@@ -12,14 +12,14 @@ def login():
     if request.method == 'POST':
         accountUserName = request.json.get('username')
         accountPassWord = request.json.get('password')
-        # return createToken(accountUserName, accountPassWord)
+        return generateJWT(accountUserName, accountPassWord)
 
 
 # token
-def generateJWT():
+def generateJWT(username,password):
     user = {
-        "username": "jafar",
-        "password": "1234"
+        "username": username,
+        "password": password
     }
     jwt_valid_seconds = 180
     expiryTime = round(datetime.now().timestamp()) + jwt_valid_seconds
@@ -35,6 +35,4 @@ def checkIfTokenIsExpired(token):
     return currentTime>tokenExp
 
 if __name__ == '__main__':
-    # app.run(host="127.0.0.1", port="5000")
-    token = generateJWT()
-    print(checkIfTokenIsExpired(token))
+    app.run(host="127.0.0.1", port="5000")
