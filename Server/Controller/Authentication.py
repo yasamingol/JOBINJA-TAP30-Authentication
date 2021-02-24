@@ -31,7 +31,7 @@ def generateJWT():
 def checkIfTokenIsExpired(token):
     decodedToken = jwt.decode(token,verify=False)
     currentTime = round(datetime.now().timestamp())
-    tokenExp = decodedToken.exp
+    tokenExp = decodedToken.get('exp')
     return currentTime>tokenExp
 
 if __name__ == '__main__':
