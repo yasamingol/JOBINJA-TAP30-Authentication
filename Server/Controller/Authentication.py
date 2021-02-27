@@ -76,15 +76,15 @@ async def checkIfTokenIsForTheLatestLogin(token, tokenId):
 
 
 async def validateUserLoginToken(token):
-    validation = await checkTokenValidation(token)
-    if (validation[0]):
+    isValid,message = await checkTokenValidation(token)
+    if (isValid):
         isValid: True
-        message: validation[1]
+        message: message
         return isValid, message
 
     else:
         isValid: False
-        message: validation[1]
+        message: message
         return isValid, message
 
 
@@ -96,5 +96,5 @@ if __name__ == '__main__':
     time.sleep(2)
     token2 = asyncio.run(generateJWT("yasamingol", "2431380"))
     asyncio.run(saveLogin("yasamingol", token2, round(datetime.now().timestamp())))
-    validation = asyncio.run(validateUserLoginToken(token2));
-    print(validation)
+    validationX = asyncio.run(validateUserLoginToken("yasamingoaefb68793u"));
+    print(validationX)
