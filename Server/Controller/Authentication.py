@@ -96,5 +96,5 @@ if __name__ == '__main__':
     time.sleep(2)
     token2 = asyncio.run(generateJWT("yasamingol", "2431380"))
     asyncio.run(saveLogin("yasamingol", token2, round(datetime.now().timestamp())))
-    validationX = asyncio.run(validateUserLoginToken("yasamingoaefb68793u"));
+    validationX = asyncio.run(validateUserLoginToken(token1));
     print(validationX)

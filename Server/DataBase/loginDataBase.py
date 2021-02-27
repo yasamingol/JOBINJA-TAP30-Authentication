@@ -7,19 +7,19 @@ db = c.cursor()
 async def createLoginTable():
      db.execute('''CREATE TABLE if not exists Logins
            (id INT PRIMARY KEY  NOT NULL,
-           userId          TEXT             NOT NULL,
+           username          TEXT             NOT NULL,
            loginToken      TEXT             NOT NULL,
            loginTime       TEXT             NOT NULL);''')
      print("Logins DB created successfully")
 
 
-async def saveLogin(userId, loginToken, loginTime):
+async def saveLogin(username, loginToken, loginTime):
     if await getNumberOfRowsOfLoginsTable()==-1:
         id = 0
     else:
         id = await getNumberOfRowsOfLoginsTable()
 
-    db.execute('INSERT INTO Logins VALUES (?,?,?,?)', (id, userId, loginToken, loginTime))
+    db.execute('INSERT INTO Logins VALUES (?,?,?,?)', (id, username, loginToken, loginTime))
     print("login saved to DB successfully")
     c.commit()
 
@@ -39,12 +39,12 @@ async def getLoginIdUsingToken(token):
 
 
 async def getAccountIdUsingToken(token):
-    accountId = db.execute('SELECT userId FROM Logins WHERE loginToken = ? ', (token,)).fetchone()[0]
-    return accountId
+    username = db.execute('SELECT username FROM Logins WHERE loginToken = ? ', (token,)).fetchone()[0]
+    return username
 
 
-async def getLastLoginTokenId(accountId):
-    tokenId = db.execute('SELECT id FROM Logins WHERE userId = ? ORDER BY loginTime DESC ', (accountId,)).fetchone()[0]
+async def getLastLoginTokenId(username):
+    tokenId = db.execute('SELECT id FROM Logins WHERE username = ? ORDER BY loginTime DESC ', (username,)).fetchone()[0]
     return tokenId
 
 async def checkIfTokenExists(token):
