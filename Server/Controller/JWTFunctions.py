@@ -64,7 +64,7 @@ async def checkIfTokenIsForTheLatestLogin(token, tokenId):
         return False
 
 
-async def validateUserLoginToken(token):
+async def validateLoginToken(token):
     isValid,message = await checkTokenValidation(token)
     if (isValid):
         isValid: True
@@ -76,3 +76,5 @@ async def validateUserLoginToken(token):
         message: message
         return isValid, message
 
+if __name__ == '__main__':
+    asyncio.run(createLoginTable())

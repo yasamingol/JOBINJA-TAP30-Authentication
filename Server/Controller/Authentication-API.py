@@ -1,5 +1,8 @@
 from flask import Flask, request
+from simplejson.tests.test_pass1 import JSON
+
 from Server.Controller.JWTFunctions import *
+import json
 # server requests
 app = Flask(__name__)
 
@@ -13,10 +16,16 @@ def login():
         return tokenX
 
 @app.route('/validateToken',methods=['POST'])
-def validateUserLoginToken():
+def validateUserLoginTokenAPI():
     if request.method == 'POST':
         token = request.json.get("token")
-        return validateUserLoginToken(token)
+        validationResult = asyncio.run(validateLoginToken(token))
+        valid = validationResult[0][0]
+        message = validationResult[1]
+        if valid==False:
+            return "False:"+message
+        else:
+            return "True:"+message
 
 
 

@@ -1,6 +1,6 @@
 import sqlite3
 
-c = sqlite3.connect('loginDB.db')
+c = sqlite3.connect('loginDB.db',check_same_thread=False)
 db = c.cursor()
 
 
