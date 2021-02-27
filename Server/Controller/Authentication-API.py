@@ -23,13 +23,7 @@ def validateUserLoginTokenAPI():
     if request.method == 'POST':
         token = request.json.get("token")
         validationResult = asyncio.run(validateLoginToken(token))
-        valid = validationResult[0]
-        message = validationResult[1]
-        if valid==False:
-            return "False:"+message
-        else:
-            return "True:"+message
-
+        return json.dumps(asyncio.run(validateLoginToken(token)), separators=(',', ':'))
 
 
 
@@ -38,7 +32,8 @@ def saveAccountRequest():
     if request.method == 'POST':
         accountUsername = request.json.get('username')
         accountPassWord = request.json.get('password')
-        return asyncio.run(saveAccount(accountUsername,accountPassWord))
+        asyncio.run(saveAccount(accountUsername,accountPassWord))
+        return "account created succesfully"
 
 @app.route('/getAccountsFullDBTable',methods=['POST'])
 def getAccountsFullDBTableRequest():
@@ -71,7 +66,10 @@ def getAccountIDUsingAccountUsernameRequest():
         username = request.json.get('username')
         return str(asyncio.run(getAccountIDUsingAccountUsername(username)))
 
-
+@app.route('/getNumberOfRowsOfAccountsTable', methods=['POST'])
+def getNumberOfRowsOfAccountsTableRequest():
+    if request.method == 'POST':
+        return str(asyncio.run(getNumberOfRowsOfAccountsTable()))
 
 
 

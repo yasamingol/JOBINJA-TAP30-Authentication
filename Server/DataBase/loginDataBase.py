@@ -68,7 +68,7 @@ async def createAccountsTable():
 async def saveAccount(username,password):
     numberOfRows = await getNumberOfRowsOfAccountsTable()
     db.execute('INSERT INTO Accounts VALUES (?,?,?)', (numberOfRows, username, password))
-    print( "account saved to DB successfully")
+    print("account saved to DB successfully")
     c.commit()
 
 
