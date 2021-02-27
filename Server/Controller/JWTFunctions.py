@@ -1,4 +1,5 @@
 # requirments
+import json
 from datetime import date, datetime, time
 import jwt
 from Server.DataBase.loginDataBase import *
@@ -78,3 +79,7 @@ async def validateLoginToken(token):
 
 if __name__ == '__main__':
     asyncio.run(createLoginTable())
+    asyncio.run(createAccountsTable())
+    asyncio.run(saveAccount("yasamingol","2431380"))
+    print(asyncio.run(getAccountIDUsingAccountUsername("yasamingol")))
+
