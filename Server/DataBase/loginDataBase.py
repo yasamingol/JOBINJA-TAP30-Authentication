@@ -46,3 +46,11 @@ async def getAccountIdUsingToken(token):
 async def getLastLoginTokenId(accountId):
     tokenId = db.execute('SELECT id FROM Logins WHERE userId = ? ORDER BY loginTime DESC ', (accountId,)).fetchone()[0]
     return tokenId
+
+async def checkIfTokenExists(token):
+    db.execute("SELECT id FROM Logins WHERE loginToken = ?", (token,))
+    data = db.fetchall()
+    if len(data) == 0:
+        return False
+    else:
+        return True

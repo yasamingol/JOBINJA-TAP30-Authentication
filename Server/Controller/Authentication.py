@@ -1,12 +1,14 @@
+# requirments
 from flask import Flask, request
 from datetime import date, datetime, time
 import jwt
 from Server.DataBase.loginDataBase import *
 import asyncio
+import time
+
+
 
 # server requests
-
-
 app = Flask(__name__)
 
 
@@ -24,7 +26,7 @@ async def generateJWT(username, password):
         "username": username,
         "password": password
     }
-    jwt_valid_seconds = -1
+    jwt_valid_seconds = 180
     expiryTime = round(datetime.now().timestamp()) + jwt_valid_seconds
     payload = {"some": "payload", "aud": user, "exp": expiryTime}
     token = jwt.encode(payload, "secret")
@@ -39,27 +41,28 @@ async def checkIfTokenIsExpired(token):
 
 
 async def checkTokenValidation(token):
-    tokenId = await getLoginIdUsingToken(token)
-    isExpired = await checkIfTokenIsExpired(token)
-    isLatestLogin = await checkIfTokenIsForTheLatestLogin(token, tokenId)
-    if isExpired:
-        isValid = True,
-        message = "token has expired!"
-        return isValid, message
+    if await checkIfTokenExists(token):
+        tokenId = await getLoginIdUsingToken(token)
+        isExpired = await checkIfTokenIsExpired(token)
+        isLatestLogin = await checkIfTokenIsForTheLatestLogin(token, tokenId)
+        if isExpired:
+            isValid = False,
+            message = "token has expired!"
+            return isValid, message
 
-    if tokenId == None:
-        isValid = True,
-        message = "token is undefined!"
-        return isValid, message
+        elif isLatestLogin != True:
+            isValid = False
+            message = "this is not your latest login! updated version of token is required."
+            return isValid, message
 
-    elif isLatestLogin!=True:
-        isValid = True
-        message = "this is not your latest login! updated version of token is required."
-        return isValid, message
+        else:
+            isValid = True
+            message = "token is valid."
+            return isValid, message
 
     else:
-        isValid = True
-        message = "token is valid."
+        isValid = False,
+        message = "token is undefined!"
         return isValid, message
 
 
@@ -74,23 +77,24 @@ async def checkIfTokenIsForTheLatestLogin(token, tokenId):
 
 async def validateUserLoginToken(token):
     validation = await checkTokenValidation(token)
-    if (validation.isValid):
+    if (validation[0]):
         isValid: True
-        message: validation.message
+        message: validation[1]
         return isValid, message
 
     else:
         isValid: False
-        message: validation.message
+        message: validation[1]
         return isValid, message
 
 
 if __name__ == '__main__':
     # asyncio.run(app.run(host="127.0.0.1", port="5000"))
     asyncio.run(createLoginTable())
-    token1 = asyncio.run(generateJWT("yasamingol","2431380"))
-    asyncio.run(saveLogin("yasamingol",token1,round(datetime.now().timestamp())))
-    token2 = asyncio.run(generateJWT("yasamingol","2431380"))
+    token1 = asyncio.run(generateJWT("yasamingol", "2431380"))
+    asyncio.run(saveLogin("yasamingol", token1, round(datetime.now().timestamp())))
+    time.sleep(2)
+    token2 = asyncio.run(generateJWT("yasamingol", "2431380"))
     asyncio.run(saveLogin("yasamingol", token2, round(datetime.now().timestamp())))
-    latestLogin = asyncio.run(checkIfTokenIsForTheLatestLogin(token1,0))
-    print(latestLogin)
+    validation = asyncio.run(validateUserLoginToken(token2));
+    print(validation)
