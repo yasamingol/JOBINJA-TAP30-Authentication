@@ -12,6 +12,14 @@ def login():
         tokenX = asyncio.run(generateJWT(accountUserName,accountPassWord))
         return tokenX
 
+@app.route('/validateToken',methods=['POST'])
+def validateUserLoginToken():
+    if request.method == 'POST':
+        token = request.json.get("token")
+        return validateUserLoginToken(token)
+
+
+
 
 if __name__ == '__main__':
     asyncio.run(app.run(host="127.0.0.1", port="5000"))
