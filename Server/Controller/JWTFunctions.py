@@ -1,24 +1,9 @@
 # requirments
-from flask import Flask, request
 from datetime import date, datetime, time
 import jwt
 from Server.DataBase.loginDataBase import *
 import asyncio
 import time
-
-global tokenX
-
-# server requests
-app = Flask(__name__)
-
-
-@app.route('/login',methods=['POST'])
-def login():
-    if request.method == 'POST':
-        accountUserName = request.json.get('username')
-        accountPassWord = request.json.get('password')
-        tokenX = asyncio.run(generateJWT(accountUserName,accountPassWord))
-        return tokenX
 
 
 
@@ -91,9 +76,3 @@ async def validateUserLoginToken(token):
         message: message
         return isValid, message
 
-
-if __name__ == '__main__':
-    asyncio.run(createLoginTable())
-    asyncio.run(app.run(host="127.0.0.1", port="5000"))
-    validationX = asyncio.run(validateUserLoginToken(tokenX))
-    print(validationX)
