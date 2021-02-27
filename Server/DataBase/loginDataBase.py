@@ -14,14 +14,18 @@ async def createLoginTable():
 
 
 async def saveLogin(userId, loginToken, loginTime):
-    id = await getNumberOfRowsOfLoginsTable()
+    if await getNumberOfRowsOfLoginsTable()==-1:
+        id = 0
+    else:
+        id = await getNumberOfRowsOfLoginsTable()
+
     db.execute('INSERT INTO Logins VALUES (?,?,?,?)', (id, userId, loginToken, loginTime))
     print("login saved to DB successfully")
     c.commit()
 
 
 async def getNumberOfRowsOfLoginsTable():
-    rowCounter = 1
+    rowCounter = db.rowcount
     return rowCounter
 
 
