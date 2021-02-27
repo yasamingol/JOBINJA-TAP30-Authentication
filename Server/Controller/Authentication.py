@@ -6,18 +6,22 @@ from Server.DataBase.loginDataBase import *
 import asyncio
 import time
 
-
+global tokenX
 
 # server requests
 app = Flask(__name__)
 
 
-@app.route('/login', methods=['POST'])
+@app.route('/login',methods=['POST'])
 def login():
     if request.method == 'POST':
         accountUserName = request.json.get('username')
         accountPassWord = request.json.get('password')
-        return generateJWT(accountUserName, accountPassWord)
+        tokenX = asyncio.run(generateJWT(accountUserName,accountPassWord))
+        return tokenX
+
+
+
 
 
 # token
@@ -89,12 +93,7 @@ async def validateUserLoginToken(token):
 
 
 if __name__ == '__main__':
-    # asyncio.run(app.run(host="127.0.0.1", port="5000"))
     asyncio.run(createLoginTable())
-    token1 = asyncio.run(generateJWT("yasamingol", "2431380"))
-    asyncio.run(saveLogin("yasamingol", token1, round(datetime.now().timestamp())))
-    time.sleep(2)
-    token2 = asyncio.run(generateJWT("yasamingol", "2431380"))
-    asyncio.run(saveLogin("yasamingol", token2, round(datetime.now().timestamp())))
-    validationX = asyncio.run(validateUserLoginToken(token1));
+    asyncio.run(app.run(host="127.0.0.1", port="5000"))
+    validationX = asyncio.run(validateUserLoginToken(tokenX))
     print(validationX)
