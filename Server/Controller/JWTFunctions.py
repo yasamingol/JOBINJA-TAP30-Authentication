@@ -3,7 +3,7 @@ from datetime import date, datetime, time
 import jwt
 from Server.DataBase.loginDataBase import *
 import asyncio
-import time
+
 
 
 
@@ -19,7 +19,7 @@ async def generateJWT(username, password):
     expiryTime = round(datetime.now().timestamp()) + jwt_valid_seconds
     payload = {"some": "payload", "aud": user, "exp": expiryTime}
     token = jwt.encode(payload, "secret")
-    return token
+    return token.decode()
 
 
 async def checkIfTokenIsExpired(token):

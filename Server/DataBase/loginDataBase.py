@@ -14,19 +14,15 @@ async def createLoginTable():
 
 
 async def saveLogin(username, loginToken, loginTime):
-    if await getNumberOfRowsOfLoginsTable()==-1:
-        id = 0
-    else:
-        id = await getNumberOfRowsOfLoginsTable()
-
-    db.execute('INSERT INTO Logins VALUES (?,?,?,?)', (id, username, loginToken, loginTime))
+    numberOfRows = await getNumberOfRowsOfLoginsTable()
+    db.execute('INSERT INTO Logins VALUES (?,?,?,?)', (numberOfRows, username, loginToken, loginTime))
     print("login saved to DB successfully")
     c.commit()
 
 
 async def getNumberOfRowsOfLoginsTable():
-    rowCounter = db.rowcount
-    return rowCounter
+    numberOfRows = len(db.execute('SELECT * FROM Logins').fetchall())
+    return numberOfRows
 
 
 async def getLoginsFullDBTable():
