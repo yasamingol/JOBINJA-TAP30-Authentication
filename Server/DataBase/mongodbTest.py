@@ -55,7 +55,7 @@ async def getAccountIDUsingAccountUsername(accountUsername) :
 
 # login db functions
 async def saveLogin(username, loginToken, loginTime):
-    id = await getNumberOfRowsOfAccountsTable()
+    id = await getNumberOfRowsOfLoginsTable()
     post = {"_id": id, "username": username, "loginToken": loginToken, "loginTime": loginTime}
     collectionLogins.insert_one(post)
     print("login saved to DB successfully")
@@ -77,7 +77,7 @@ async def getAccountIdUsingToken(token):
     return result
 
 async def getLastLoginTokenId(username):
-    result = collectionLogins.find_one({"username": username}, {"$query": {}, "$orderby": {"loginTime": -1}})
+    result = collectionLogins.find({"username": username}, {"$sort": {"loginTime": -1}})
     return result
 
 async def checkIfTokenExists(token):
@@ -86,7 +86,9 @@ async def checkIfTokenExists(token):
 
 
 
+result = asyncio.run(getLastLoginTokenId("yasamingol"))
+for res in result:
+    print(res["_id"])
 
-asyncio.run(saveLogin("yasamingol","1234","123"))
 
 
