@@ -2,6 +2,7 @@ from flask import Flask, request
 from datetime import date, datetime, time
 from Server.Controller.JWTFunctions import *
 import json
+from bson.json_util import dumps
 
 
 import json
@@ -35,10 +36,12 @@ def saveAccountRequest():
         asyncio.run(saveAccount(accountUsername,accountPassWord))
         return "account created succesfully"
 
+
+
 @app.route('/getAccountsFullDBTable',methods=['POST'])
 def getAccountsFullDBTableRequest():
     if request.method == 'POST':
-        return json.dumps(asyncio.run(getAccountsFullDBTable()),separators=(',', ':'))
+        return dumps(list(asyncio.run(getAccountsFullDBTable())),separators=(',', ':'))
 
 
 @app.route('/getFullAccountById', methods=['POST'])
@@ -46,7 +49,7 @@ def getFullAccountByIdRequest():
     if request.method == 'POST':
         accountId = request.json.get('id')
         account = asyncio.run(getFullAccountById(0))
-        return json.dumps((account), separators=(',', ':'))
+        return dumps(list(account), separators=(',', ':'))
 
 @app.route('/getAccountUsernameUsingAccountId', methods=['POST'])
 def getAccountUsernameUsingAccountIdRequest():

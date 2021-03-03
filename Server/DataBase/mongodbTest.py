@@ -84,8 +84,5 @@ async def checkIfTokenExists(token):
     result = collectionLogins.find({"loginToken": token})
     return result
 
-result = asyncio.run(checkIfTokenExists("567898765467jsdhfksuebfkc"))
-for res in result:
-    print(res)
 
 
