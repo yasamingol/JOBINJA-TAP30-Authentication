@@ -77,18 +77,15 @@ async def getAccountIdUsingToken(token):
     return result
 
 async def getLastLoginTokenId(username):
-    result = collectionLogins.find({"username": username}, {"$sort": {"loginTime": -1}})
+    result = collectionLogins.find({"username": username}).sort([("_id", -1)]).limit(1)
     return result
 
 async def checkIfTokenExists(token):
     result = collectionLogins.find({"loginToken": token})
     return result
 
-
-
-result = asyncio.run(getLastLoginTokenId("yasamingol"))
+result = asyncio.run(checkIfTokenExists("567898765467jsdhfksuebfkc"))
 for res in result:
-    print(res["_id"])
-
+    print(res)
 
 
