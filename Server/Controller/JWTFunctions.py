@@ -2,7 +2,7 @@
 import json
 from datetime import date, datetime, time
 import jwt
-from Server.DataBase.loginDataBase import *
+from Server.DataBase.mongodbTest import *
 import asyncio
 
 
@@ -59,10 +59,11 @@ async def checkTokenValidation(token):
 async def checkIfTokenIsForTheLatestLogin(token, tokenId):
     accountId = await getAccountIdUsingToken(token)
     latestTokenId = await getLastLoginTokenId(accountId)
-    if latestTokenId == tokenId:
-        return True
-    else:
-        return False
+    for result in latestTokenId:
+        if result['_id'] == tokenId:
+            return True
+        else:
+            return False
 
 
 async def validateLoginToken(token):
@@ -77,7 +78,4 @@ async def validateLoginToken(token):
         message: message
         return isValid, message
 
-if __name__ == '__main__':
-    asyncio.run(createLoginTable())
-    asyncio.run(createAccountsTable())
 
