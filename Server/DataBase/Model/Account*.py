@@ -13,8 +13,16 @@ class Account(Document):
     meta = {'collection': 'accounts'}
 
 
+
+async def getNumberOfRowsOfAccountsTable():
+    numberOfAccounts = Account.objects().count()
+    return numberOfAccounts
+
+
+
 async def saveAccount(username, password):
-    Account(username=username, password=password, _id="1").save()
+    id = await getNumberOfRowsOfAccountsTable()
+    Account(username=username, password=password, _id=str(id+1)).save()
     print("account saved to DB successfully")
 
 
@@ -40,5 +48,4 @@ async def getAccountIDUsingAccountUsername(accountUsername) :
     return account._id
 
 
-# asyncio.run(saveAccount("yasamingol","2431380"))
-print(asyncio.run(getAccountIDUsingAccountUsername("yasamingol")))
+asyncio.run(saveAccount("mamad","1234"))
