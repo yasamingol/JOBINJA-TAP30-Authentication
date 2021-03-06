@@ -47,6 +47,3 @@ async def checkIfTokenExists(token):
     return result
 
 
-asyncio.run(saveLogin("yasamingol","token","797359689"))
-print(asyncio.run(getLastLoginTokenId("yasamingol")))
-
