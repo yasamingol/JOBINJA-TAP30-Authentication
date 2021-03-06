@@ -38,14 +38,15 @@ async def getAccountIdUsingToken(token):
     return login.username
 
 async def getLastLoginTokenId(username):
-    result = Login.objects(username=username).order_by("loginTime")
-    return result
+    resultList = Login.objects(username=username)
+    result = resultList[(len(resultList))-1]
+    return result._id
 
 async def checkIfTokenExists(token):
     result = Login.objects(loginToken= token)
     return result
 
 
-# asyncio.run(saveLogin("yasamingol","token","60"))
-print(asyncio.run(getLastLoginTokenId("token")))
+asyncio.run(saveLogin("yasamingol","token","797359689"))
+print(asyncio.run(getLastLoginTokenId("yasamingol")))
 
