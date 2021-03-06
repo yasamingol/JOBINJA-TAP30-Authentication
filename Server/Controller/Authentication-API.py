@@ -14,7 +14,7 @@ def login():
         accountUserName = request.json.get('username')
         accountPassWord = request.json.get('password')
         tokenX = asyncio.run(generateJWT(accountUserName,accountPassWord))
-        asyncio.run(saveLogin(accountUserName,tokenX,round(datetime.now().timestamp())))
+        asyncio.run(saveLogin(accountUserName,tokenX,str(round(datetime.now().timestamp()))))
         return tokenX
 
 @app.route('/validateToken',methods=['POST'])
@@ -46,8 +46,8 @@ def getAccountsFullDBTableRequest():
 def getFullAccountByIdRequest():
     if request.method == 'POST':
         accountId = request.json.get('id')
-        account = asyncio.run(getFullAccountById(0))
-        return dumps(list(account), separators=(',', ':'))
+        account = asyncio.run(getFullAccountById(accountId))
+        return "username :" +account.username+" password: "+account.password
 
 @app.route('/getAccountUsernameUsingAccountId', methods=['POST'])
 def getAccountUsernameUsingAccountIdRequest():
