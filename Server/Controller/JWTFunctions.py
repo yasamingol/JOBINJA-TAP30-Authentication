@@ -61,7 +61,7 @@ async def checkIfTokenIsForTheLatestLogin(token, tokenId):
     accountId = await getAccountIdUsingToken(token)
     latestTokenId = await getLastLoginTokenId(accountId)
     for result in latestTokenId:
-        if result['_id'] == tokenId:
+        if result == tokenId:
             return True
         else:
             return False

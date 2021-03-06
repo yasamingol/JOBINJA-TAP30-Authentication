@@ -22,7 +22,7 @@ def validateUserLoginTokenAPI():
     if request.method == 'POST':
         token = request.json.get("token")
         validationResult = asyncio.run(validateLoginToken(token))
-        return json.dumps(asyncio.run(validateLoginToken(token)), separators=(',', ':'))
+        return json.dumps(validationResult, separators=(',', ':'))
 
 
 
