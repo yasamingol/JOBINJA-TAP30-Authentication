@@ -45,20 +45,20 @@ def getAccountsFullDBTableRequest():
 @app.route('/getFullAccountById', methods=['POST'])
 def getFullAccountByIdRequest():
     if request.method == 'POST':
-        accountId = request.json.get('id')
-        account = asyncio.run(getFullAccountById(str(accountId)))
+        accountId = str(request.json.get('id'))
+        account = asyncio.run(getFullAccountById(accountId))
         return account.username+"/"+account.password
 
 @app.route('/getAccountUsernameUsingAccountId', methods=['POST'])
 def getAccountUsernameUsingAccountIdRequest():
     if request.method == 'POST':
-        accountId = request.json.get('id')
+        accountId = str(request.json.get('id'))
         return asyncio.run(getAccountUsernameUsingAccountId(accountId))
 
 @app.route('/getAccountPasswordUsingAccountId', methods=['POST'])
 def getAccountPasswordUsingAccountIdRequest():
     if request.method == 'POST':
-        accountId = request.json.get('id')
+        accountId = str(request.json.get('id'))
         return asyncio.run(getAccountPasswordUsingAccountId(accountId))
 
 @app.route('/getAccountIDUsingAccountUsername', methods=['POST'])
