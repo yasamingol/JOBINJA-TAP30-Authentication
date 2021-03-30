@@ -13,8 +13,8 @@ def login():
     if request.method == 'POST':
         accountUserName = request.json.get('username')
         accountPassWord = request.json.get('password')
-        tokenX = asyncio.run(generateJWT(accountUserName,accountPassWord))
-        asyncio.run(saveLogin(accountUserName,tokenX,str(round(datetime.now().timestamp()))))
+        tokenX = asyncio.run(generateJWT(accountUserName, accountPassWord))
+        asyncio.run(saveLogin(accountUserName, tokenX, str(round(datetime.now().timestamp()))))
         return tokenX
 
 @app.route('/validateToken',methods=['POST'])
@@ -31,8 +31,8 @@ def saveAccountRequest():
     if request.method == 'POST':
         accountUsername = request.json.get('username')
         accountPassWord = request.json.get('password')
-        asyncio.run(saveAccount(accountUsername,accountPassWord))
-        return "account created succesfully"
+        account = asyncio.run(saveAccount(accountUsername, accountPassWord))
+        return account
 
 
 
@@ -75,5 +75,5 @@ def getNumberOfRowsOfAccountsTableRequest():
 
 
 if __name__ == '__main__':
-    asyncio.run(app.run(host="127.0.0.1", port="5001"))
+    asyncio.run(app.run(host="127.0.0.1", port="5002"))
 

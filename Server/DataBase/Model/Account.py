@@ -22,8 +22,9 @@ async def getNumberOfRowsOfAccountsTable():
 
 async def saveAccount(username, password):
     id = await getNumberOfRowsOfAccountsTable()
-    Account(username=username, password=password, _id=str(id+1)).save()
+    account = Account(username=username, password=password, _id=str(id+1)).save()
     print("account saved to DB successfully")
+    return account._id
 
 
 async def getAccountsFullDBTable():
